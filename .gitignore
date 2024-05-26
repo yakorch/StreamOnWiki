@@ -162,3 +162,5 @@ cython_debug/
 
 ### Custom
 storage/*/*
+logs.txt
+*.DS_Store

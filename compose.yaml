@@ -81,8 +81,6 @@ services:
     container_name: cassandra-node-1
     ports:
       - "9042:9042"
-    volumes:
-      - ./storage/cassandra/node-2:/var/lib/cassandra
     <<: *cassandra-common
     <<: *common-network
     <<: *cassandra-health-check
@@ -93,8 +91,6 @@ services:
     depends_on:
       cassandra-node-1:
         condition: service_healthy
-    volumes:
-      - ./storage/cassandra/node-2:/var/lib/cassandra
     <<: *cassandra-common
     <<: *common-network
     <<: *cassandra-health-check
@@ -133,7 +129,7 @@ services:
         condition: service_healthy
 
   spark-master:
-    image: docker.io/bitnami/spark:3
+    image: docker.io/bitnami/spark:3.5.0
     container_name: spark-master
     ports:
       - "8080:8080"
@@ -142,15 +138,19 @@ services:
       - SPARK_MODE=master
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - WIKI_EVENTS_TOPIC=wiki-events
+      - CASSANDRA_HOST=cassandra-node-1
+      - CASSANDRA_PORT=9042
     volumes:
       - ./services/spark_streaming.py:/code/spark_streaming.py
     depends_on:
       kafka-producer:
         condition: service_started
+      cassandra-node-1:
+        condition: service_healthy
     <<: *common-network
 
   spark-worker:
-    image: docker.io/bitnami/spark:3
+    image: docker.io/bitnami/spark:3.5.0
     container_name: spark-worker
     hostname: spark-worker
     ports:

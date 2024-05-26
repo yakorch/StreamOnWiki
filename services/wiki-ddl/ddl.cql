@@ -3,9 +3,8 @@ CREATE KEYSPACE IF NOT EXISTS wikipedia WITH REPLICATION = {'class' : 'SimpleStr
 USE wikipedia;
 
 
-CREATE TABLE IF NOT EXISTS unique_entities (
-    entity_id TEXT PRIMARY KEY,
-    entities SET<TEXT>,
+CREATE TABLE IF NOT EXISTS unique_domains (
+    domain TEXT PRIMARY KEY,
 );
 
 
@@ -20,13 +19,13 @@ CREATE TABLE IF NOT EXISTS page_information (
     uri TEXT,
     title TEXT,
 
-    PRIMARY KEY ((page_id), uri)
+    PRIMARY KEY (page_id)
 );
 
 CREATE TABLE IF NOT EXISTS domain_pages (
     domain TEXT,
-    num_pages INT,
-    PRIMARY KEY ((domain), num_pages)
+    num_pages COUNTER,
+    PRIMARY KEY ((domain))
 );
 
 
@@ -34,6 +33,6 @@ CREATE TABLE IF NOT EXISTS active_users_by_date (
     date DATE,
     user_id INT,
     user_name TEXT,
-    num_created_pages INT,
-    PRIMARY KEY ((date), user_id)
+    num_created_pages COUNTER,
+    PRIMARY KEY ((date), user_id, user_name)
 );

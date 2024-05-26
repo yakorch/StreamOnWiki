@@ -15,14 +15,10 @@ class WikiCassandraClient(AbstractCassandraClient):
         logging.info("`WikiCassandraClient` has initialized successfully")
 
     def get_unique_domains(self) -> list[str]:
-        query = f"SELECT entities FROM {self.keyspace}.unique_entities " f"WHERE entity_id = 'domains';"
+        query = f"SELECT domain FROM {self.keyspace}.unique_domains;"
 
         q_result = self.execute(query).all()
-        if not q_result:
-            return []
-
-        domains = list(q_result[0].entities)
-        return domains
+        return [row.domain for row in q_result]
 
     def get_user_page_ids(self, user_id: int) -> list[int]:
         query = f"SELECT page_id FROM {self.keyspace}.user_pages WHERE user_id = {user_id};"
