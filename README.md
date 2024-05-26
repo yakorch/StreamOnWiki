@@ -52,7 +52,7 @@ After letting the app work for some time, we can verify the availability of REST
 ![updated domains][media/updated_domains.png]
 We get the list of domains, which were updated during application uptime.
 Let's explore domain `id.wikipedia.org`:
-![number of created pages](media/num_created_pages.png)
+![number of created pages](./media/num_created_pages.png)
 We see that $6$ pages have been created on this domain.
 ___
 Active users:
