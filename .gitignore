@@ -164,3 +164,4 @@ cython_debug/
 storage/*/*
 logs.txt
 *.DS_Store
+.obsidian/*

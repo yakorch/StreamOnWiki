@@ -68,13 +68,12 @@ write_page_information = partial(write_to_wiki_cassandra, table="page_informatio
 write_domain_pages = partial(write_to_wiki_cassandra, table="domain_pages")
 write_active_users_by_date = partial(write_to_wiki_cassandra, table="active_users_by_date")
 
-
+query_console = json_df.select("data.*").writeStream.format("console").outputMode("append").start()
 query_unique_domains = json_df.select("data.domain").writeStream.outputMode("update").foreachBatch(write_unique_domains).start()
 query_user_pages = json_df.select("data.user_id", "data.page_id").writeStream.outputMode("append").foreachBatch(write_user_pages).start()
 query_page_information = (
     json_df.select("data.page_id", "data.uri", "data.title").writeStream.outputMode("append").foreachBatch(write_page_information).start()
 )
-query_console = json_df.select("data.*").writeStream.format("console").outputMode("append").start()
 query_domain_pages = (
     json_df.groupBy("data.domain")
     .agg(count("data.page_id").alias("num_pages"))
@@ -92,6 +91,7 @@ query_active_users_by_date = (
 
 
 query_console.awaitTermination()
+query_unique_domains.awaitTermination()
 query_user_pages.awaitTermination()
 query_page_information.awaitTermination()
 query_domain_pages.awaitTermination()

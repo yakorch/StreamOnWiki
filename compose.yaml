@@ -141,7 +141,8 @@ services:
       - CASSANDRA_HOST=cassandra-node-1
       - CASSANDRA_PORT=9042
     volumes:
-      - ./services/spark_streaming.py:/code/spark_streaming.py
+      - ./services/streaming:/code/streaming
+    command: ["/bin/bash", "/code/streaming/submit_streaming.sh"]
     depends_on:
       kafka-producer:
         condition: service_started
