@@ -86,6 +86,6 @@ docker compose up -d
 Stop all:
 ```bash
 docker compose down [--volumes]
-docker rmi ...  # locally built images
+docker rmi kafka-producer wiki-ddl wiki-rest-api  # locally built images
 ```
 
