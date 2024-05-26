@@ -9,7 +9,7 @@ Implementation of the Wikipedia project proposed on Big Data Processing course a
 The application monitors created pages on Wikipedia, and accumulates the following data:
 - Domains where the pages were created, referred to as "updated domains";
 - Pages by specified users;
-- $\#$ of pages created for a specified domain;
+- Number of pages created for a specified domain;
 - Page information for a specified page ID;
 - Users who created at least $1$ page in the specified time range, referred to as "active users".
 
@@ -40,13 +40,12 @@ REST API service interacts with Cassandra directly and implements `GET` requests
 Cassandra table schemas can be found [here](./services/wiki-ddl/ddl.cql). The first $3$ schemas are self-explanatory.
 - `domain_pages` lists the number of pages updated for each domain. Column's `num_pages` type `COUNTER` makes updating the table entries easy.
 - `active_users_by_date` stores the number of created pages for each user given a date (YYYY-MM-DD format.) `COUNTER` is used for similar purposes as in the previous table.
-	When one wants to access the active users for a time period $\text{[start\_date:end\_date]}$, 
+	When one wants to access the active users for a time period $\text{[start:end]}$, 
 	the REST API server iterates over all the dates in-between, and accumulates the results of all the users.
 	Note: this approach may not be the most efficient when the length of time interval becomes large, and also it requires to store a lot of data in Cassandra.
 	Possible improvements:
 	- forbid the requests when the interval length is greater than a month;
 	- choose different approach for data modelling.
-	
 
 # Request Examples
 After letting the app work for some time, we can verify the availability of REST API.
