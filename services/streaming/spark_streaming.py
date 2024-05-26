@@ -51,7 +51,7 @@ input_stream = (
 logging.info(f"{input_stream.printSchema() = }")
 
 json_df = input_stream.select(from_json(col("json"), schema).alias("data"))
-json_df_with_date = json_df.withColumn("date", date_format(to_timestamp(col("data.dt"), "yyyy-MM-dd'T'HH:mm:ss'Z'"), "yyyy-MM-dd"))
+json_df = json_df.withColumn("date", date_format(to_timestamp(col("data.dt"), "yyyy-MM-dd'T'HH:mm:ss'Z'"), "yyyy-MM-dd"))
 
 json_df.printSchema()
 
@@ -82,7 +82,7 @@ query_domain_pages = (
     .start()
 )
 query_active_users_by_date = (
-    json_df_with_date.groupBy("date", "data.user_id", "data.user_name")
+    json_df.groupBy("date", "data.user_id", "data.user_name")
     .agg(count("data.page_id").alias("num_created_pages"))
     .writeStream.outputMode("update")
     .foreachBatch(write_active_users_by_date)
